@@ -1,23 +1,20 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Task1
 {
-    public class LinkedList<T> where T : IComparable
-    {
-        private class Node<T>
-        {
-            public T _data;
-            public Node<T> _next;
-
-            public Node(T data)
-            {
-                _data = data;
-            }
-        }
-
+    public class LinkedList<T> : IEnumerable<T> where T : IComparable
+    {       
         private Node<T> _first;
         private Node<T> _last;
         private int _count;
+
+        public LinkedList()
+        {
+            _first = new Node<T>(default(T));
+            _last = _first;
+        }
 
         public void Add(T item)
         {
@@ -145,6 +142,73 @@ namespace Task1
 
             if (index == (_count - 1))
                 _last = previous;
+        }
+
+        public bool MoveNext()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new LinkedListEnumerator<T>(_first);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+
+    public class Node<T>
+    {
+        public T _data;
+        public Node<T> _next;
+
+        public Node(T data)
+        {
+            _data = data;
+        }
+    }
+
+    public class LinkedListEnumerator<T> : IEnumerator<T>
+    {
+        private Node<T> current;
+
+        public LinkedListEnumerator(Node<T> current)
+        {
+            this.current = current;
+        }
+
+        public T Current => current._data;
+
+        object IEnumerator.Current => Current;
+
+        public bool MoveNext()
+        {
+            if (current == null) return false;
+            current = current._next;
+            return (current != null);
+        }
+
+        public void Dispose()
+        {
+
+        }
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
         }
     }
 }
