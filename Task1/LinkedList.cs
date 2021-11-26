@@ -2,7 +2,7 @@
 
 namespace Task1
 {
-    public class LinkedList<T>
+    public class LinkedList<T> where T : IComparable
     {
         private class Node<T>
         {
@@ -95,5 +95,22 @@ namespace Task1
             _count++;
         }
 
+        public void Remove(T item) 
+        {
+            var previous = _first;
+            var runner = _first;
+
+            while(runner != null)
+            {
+                if (item.CompareTo(runner._data) == 0)
+                {
+                    previous._next = runner._next;
+                    break;
+                }
+
+                previous = runner;
+                runner = runner._next;
+            }            
+        }
     }
 }
