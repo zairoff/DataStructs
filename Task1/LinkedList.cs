@@ -17,12 +17,13 @@ namespace Task1
 
         private Node<T> _first;
         private Node<T> _last;
+        private int _count;
 
         public void Add(T item)
         {
             var node = new Node<T>(item);
 
-            if (_first == null)
+            if (IsEmpty())
                 _first = _last = node;
             else
             {
@@ -30,6 +31,68 @@ namespace Task1
                 _last = node;
             }
 
+            _count++;
+        }
+
+        public int Length()
+        {
+            return _count;
+        }
+
+        private bool IsEmpty()
+        {
+            return _first == null;
+        }
+
+        public void Print()
+        {
+            var runner = _first;
+            while(runner != null)
+            {
+                Console.WriteLine(runner._data);
+                runner = runner._next;
+            }
+        }
+
+        public void AddAt(int index, T item)
+        {
+            if (index > _count)
+                throw new IndexOutOfRangeException();
+
+            var node = new Node<T>(item);
+
+            if (IsEmpty())
+            {
+                _first = _last = node;
+                _count++;
+                return;
+            }
+
+            // check if insertion to the beginning
+            if(index == 0)
+            {
+                node._next = _first;
+                _first = node;
+                _count++;
+                return;
+            }
+
+            // check if insertion to the end
+            if(index == _count)
+            {
+                _last._next = node;
+                _last = node;
+                _count++;
+                return;
+            }
+
+            var runner = _first;
+            while (--index > 0)
+                runner = runner._next;
+
+            node._next = runner._next;
+            runner._next = node;
+            _count++;
         }
 
     }
