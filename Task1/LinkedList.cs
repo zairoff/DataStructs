@@ -4,16 +4,32 @@ using System.Collections.Generic;
 
 namespace Task1
 {
-    public class LinkedList<T> : IEnumerable<T> where T : IComparable
+    public class LinkedList<T> : IEnumerable<T>, IEnumerator<T> where T : IComparable
     {       
         private Node<T> _first;
         private Node<T> _last;
         private int _count;
+        private Node<T> _runner;
+
+        private class Node<T>
+        {
+            public T _data;
+            public Node<T> _next;
+
+            public Node(T data)
+            {
+                _data = data;
+            }
+        }
+
+        public T Current => _runner._data;
+
+        object IEnumerator.Current => _runner;
 
         public LinkedList()
         {
             _first = new Node<T>(default(T));
-            _last = _first;
+            _runner = _last = _first;
         }
 
         public void Add(T item)
@@ -21,7 +37,7 @@ namespace Task1
             var node = new Node<T>(item);
 
             if (IsEmpty())
-                _first = _last = node;
+                _runner = _first = _last = node;
             else
             {
                 _last._next = node;
@@ -60,7 +76,7 @@ namespace Task1
 
             if (IsEmpty())
             {
-                _first = _last = node;
+                _runner = _first = _last = node;
                 _count++;
                 return;
             }
@@ -146,69 +162,28 @@ namespace Task1
 
         public bool MoveNext()
         {
-            throw new NotImplementedException();
+            if (_runner == null) return false;
+            _runner = _runner._next;
+            return (_runner != null);
         }
 
         public void Reset()
         {
-            throw new NotImplementedException();
+            _runner = _first;
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return new LinkedListEnumerator<T>(_first);
+            return this;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-    }
-
-    public class Node<T>
-    {
-        public T _data;
-        public Node<T> _next;
-
-        public Node(T data)
-        {
-            _data = data;
-        }
-    }
-
-    public class LinkedListEnumerator<T> : IEnumerator<T>
-    {
-        private Node<T> current;
-
-        public LinkedListEnumerator(Node<T> current)
-        {
-            this.current = current;
-        }
-
-        public T Current => current._data;
-
-        object IEnumerator.Current => Current;
-
-        public bool MoveNext()
-        {
-            if (current == null) return false;
-            current = current._next;
-            return (current != null);
-        }
-
-        public void Dispose()
-        {
-
-        }
-
-        public void Reset()
-        {
-            throw new NotImplementedException();
         }
     }
 }
