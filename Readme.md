@@ -1,5 +1,3 @@
-# .NET Mentoring basics Module8
-
 ## Implement LinkedList with such function set:
 
 - Length
